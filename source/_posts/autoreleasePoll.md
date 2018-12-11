@@ -146,7 +146,7 @@ static inline id *autoreleaseFast(id obj)
 * page存在，但是page满了。 `return autoreleaseFullPage(obj, page);`
 * page不存在。 `return autoreleaseNoPage(obj);`
 
-先来看看第一种情况的`add`方法:
+###第一种情况:
 
 ``` cpp
 id *add(id obj)
@@ -157,11 +157,10 @@ id *add(id obj)
   protect();
   return ret;
 }
-``` 
+```
 
-`*next++ = obj` 这句话的意思是: next指针指向obj,然后next指针+1.说明苹果是通过这种方式将autorelease对象存储的。
-
-看看第二种情况:
+其中`*next++ = obj` 这句话的意思是: next指针指向obj,然后next指针+1.说明苹果是通过这种方式将autorelease对象存储的。
+###第二种情况:
 
 ``` cpp
 static __attribute__((noinline))
@@ -179,7 +178,7 @@ id *autoreleaseFullPage(id obj, AutoreleasePoolPage *page)
 
 这段代码的大概意思是: 通过一个接一个的节点来寻找没有满的page。如果page满了就新建一个page。把新建的page设置为hotpage, 然后将autorelase对象存储page中。
 
-看看第三种情况:
+###第三种情况:
 
 ``` cpp
 static __attribute__((noinline))
